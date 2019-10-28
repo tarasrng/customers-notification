@@ -2,7 +2,6 @@ package com.customers.notification.repository;
 
 import com.customers.notification.VertxSingletonHolder;
 import io.micronaut.context.annotation.Factory;
-import io.vertx.core.Vertx;
 import io.vertx.mysqlclient.MySQLConnectOptions;
 import io.vertx.mysqlclient.MySQLPool;
 import io.vertx.sqlclient.PoolOptions;
@@ -25,8 +24,4 @@ public class PoolFactory {
         return MySQLPool.pool(VertxSingletonHolder.vertx(), connectOptions, poolOptions);
     }
 
-    @Singleton
-    Vertx createVertx() {
-        return Vertx.vertx();
-    }
 }
