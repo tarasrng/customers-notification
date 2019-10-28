@@ -3,18 +3,23 @@ package com.customers.notification.service;
 import com.customers.notification.repository.Customer;
 import com.customers.notification.repository.CustomerRepository;
 import io.vertx.core.Future;
-import io.vertx.sqlclient.SqlConnection;
 
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public class CustomerService {
-    private CustomerRepository customerRepository = new CustomerRepository();
+    private CustomerRepository customerRepository;
 
-    public Future<List<Customer>> getCustomers(int offset, int limit, SqlConnection connection) {
-        return customerRepository.getCustomers(offset, limit, connection);
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
-    public Future<Void> addCustomer(Customer customer, SqlConnection connection) {
-        return customerRepository.addCustomer(customer, connection);
+    public Future<List<Customer>> getCustomers(int offset, int limit) {
+        return customerRepository.getCustomers(offset, limit);
+    }
+
+    public Future<Void> addCustomer(Customer customer) {
+        return customerRepository.addCustomer(customer);
     }
 }

@@ -1,10 +1,16 @@
 package com.customers.notification.repository;
 
+import com.customers.notification.VertxSingletonHolder;
+import io.micronaut.context.annotation.Factory;
+import io.vertx.core.Vertx;
 import io.vertx.mysqlclient.MySQLConnectOptions;
 import io.vertx.mysqlclient.MySQLPool;
 import io.vertx.sqlclient.PoolOptions;
 
-public final class PoolManager {
+import javax.inject.Singleton;
+
+@Factory
+public class PoolFactory {
     private static MySQLConnectOptions connectOptions = new MySQLConnectOptions()
             .setPort(InMemoryDBHandler.PORT)
             .setHost("localhost")
@@ -14,12 +20,13 @@ public final class PoolManager {
     private static PoolOptions poolOptions = new PoolOptions()
             .setMaxSize(5);
 
-    private static MySQLPool pool;
+    @Singleton
+    MySQLPool createPool() {
+        return MySQLPool.pool(VertxSingletonHolder.vertx(), connectOptions, poolOptions);
+    }
 
-    public static MySQLPool getPool() {
-        if (pool == null) {
-            pool = MySQLPool.pool(connectOptions, poolOptions);
-        }
-        return pool;
+    @Singleton
+    Vertx createVertx() {
+        return Vertx.vertx();
     }
 }
